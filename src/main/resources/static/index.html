@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- версия для разработки, отображает полезные предупреждения в консоли -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
+</head>
+<body>
+<h3>Получить всех лордов бездельников:</h3>
+<button id="buttonHidden" type = "submit" onclick="getAllLoafers()">Get all loafers</button>
+<div id="hidden" style="display: none;"><div id="app">{{message}}</div></div>
+<h3>Добавить лорда:</h3>
+<div id="saveLord">{{message}}</div>
+<h3>Назначить лорда управлять планетой:</h3>
+<div id="rulePlanet"></div>
+<h3>Получить топ 10 молодых лордов:</h3>
+<button id="buttonHidden2" type = "submit" onclick="getYoungLord()">Get all young lord</button>
+<div style="display: none;" id="hidden2"><div id="app2">{{lords}}</div></div>
+<h3>Удалить планету:</h3>
+<div id="deletePlanet"></div>
+<h3>Добавить планету:</h3>
+<div id="savePlanet"></div>
+<div id="addPlanet"></div>
+
+
+<script src="js/main.js"></script>
+<script src="js/main_2.js"></script><!-- создал еще один для удобства работы-->
+<script>
+    var planetSave = Vue.resource('/planet/add');
+
+    var addPlanet = new Vue({
+        el: '#addPlanet',
+        props: ['ruleId'],
+        data: function () {
+            return {
+                name: '',
+            }
+        },
+        template: '<div> <input id="nameForSavePlanet" type="text" placeholder="Write name" v-model="name"/>' +
+            '<input id="buttonSavePlanet" type="button" value="Save" v-on:click="save"/></div>'
+        ,
+        methods: {
+            save: function () {
+                var lord = {name: this.name}
+                console.log(this.name)
+                console.log(planetSave)
+                planetSave.save({}, lord).then(result => {
+                    result.json().then(data => {
+                        this.name = ''
+                    })
+                })
+            },
+            show: function (){
+                if(document.getElementById('hidden').style.display === 'none')
+                    document.getElementById('hidden').style.display = ''
+                else
+                    document.getElementById('hidden').style.display = 'none'
+                console.log("true")
+            }
+        }
+    })
+
+
+    function getAllLoafers(){
+        if(document.getElementById('hidden').style.display === 'none')
+            document.getElementById('hidden').style.display = ''
+        else
+            document.getElementById('hidden').style.display = 'none'
+        console.log("true")
+    }
+
+    function getYoungLord(){
+        if(document.getElementById('hidden2').style.display === 'none')
+            document.getElementById('hidden2').style.display = ''
+        else
+            document.getElementById('hidden2').style.display = 'none'
+        console.log("true")
+    }
+</script>
+</body>
+</html>
